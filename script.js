@@ -104,18 +104,65 @@
     hideBanner();
   }
 
-  // --- Theme-Toggle (Hell-/Dunkelmodus) ---
-  const themeToggle = document.querySelector("[data-theme-toggle]");
+  // --- Theme-Vorschau (Modal) ---
+  const themeOpenButtons = document.querySelectorAll("[data-open-theme-preview]");
+  const themePreviewOverlay = document.querySelector("[data-theme-preview-overlay]");
+  const themePreviewClose = document.querySelector("[data-theme-preview-close]");
+  const themePreviewCards = document.querySelectorAll("[data-theme-preview-pick]");
+  const themeToggleLabels = document.querySelectorAll("[data-theme-toggle-label]");
+
   function currentTheme() {
     return document.documentElement.getAttribute("data-theme") || "dark";
   }
+
   function setTheme(theme) {
     document.documentElement.setAttribute("data-theme", theme);
     try { localStorage.setItem(themeKey, theme); } catch (e) {}
+    updateThemeLabels();
   }
-  if (themeToggle) {
-    themeToggle.addEventListener("click", function () {
-      setTheme(currentTheme() === "dark" ? "light" : "dark");
+
+  function updateThemeLabels() {
+    const theme = currentTheme();
+    const nextLabel = theme === "dark" ? "Heller Modus" : "Dunkler Modus";
+    themeToggleLabels.forEach(function (label) {
+      label.textContent = nextLabel;
+    });
+    themePreviewCards.forEach(function (card) {
+      card.setAttribute("data-active", card.getAttribute("data-theme-preview-pick") === theme ? "true" : "false");
     });
   }
+
+  function openThemePreview() {
+    if (!themePreviewOverlay) return;
+    updateThemeLabels();
+    themePreviewOverlay.removeAttribute("hidden");
+    document.body.style.overflow = "hidden";
+  }
+
+  function closeThemePreview() {
+    if (!themePreviewOverlay) return;
+    themePreviewOverlay.setAttribute("hidden", "");
+    document.body.style.overflow = "";
+  }
+
+  themeOpenButtons.forEach(function (button) {
+    button.addEventListener("click", openThemePreview);
+  });
+  if (themePreviewClose) themePreviewClose.addEventListener("click", closeThemePreview);
+  if (themePreviewOverlay) {
+    themePreviewOverlay.addEventListener("click", function (event) {
+      if (event.target === themePreviewOverlay) closeThemePreview();
+    });
+  }
+  themePreviewCards.forEach(function (card) {
+    card.addEventListener("click", function () {
+      setTheme(card.getAttribute("data-theme-preview-pick"));
+      closeThemePreview();
+    });
+  });
+  document.addEventListener("keydown", function (event) {
+    if (event.key === "Escape" && themePreviewOverlay && !themePreviewOverlay.hidden) closeThemePreview();
+  });
+
+  updateThemeLabels();
 })();

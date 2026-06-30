@@ -72,7 +72,7 @@
 
   <header class="topbar">
     <div class="container nav">
-      <a class="brand" href="#" aria-label="AS-TecSolutions Startseite">
+      <a class="brand" href="index.html" aria-label="AS-TecSolutions Startseite">
         <span class="brand-lockup">
           <span class="brand-main"><span class="brand-gold">AS-Tec</span><span class="brand-light">Solutions</span></span>
         </span>
@@ -339,35 +339,6 @@
       </div>
     </section>
 
-    <section id="faq" class="faq">
-      <div class="container faq-grid">
-        <div class="faq-intro">
-          <div class="eyebrow">FAQ</div>
-          <h2>Häufige Fragen vor Projektstart.</h2>
-          <p>Die wichtigsten Punkte rund um Anfrage, Zusammenarbeit und technische Umsetzung auf einen Blick.</p>
-        </div>
-
-        <div class="faq-list">
-          <details>
-            <summary>Übernimmt AS-TecSolutions komplette Projekte?</summary>
-            <p>Je nach Umfang können Planung, technische Umsetzung und Betreuung aus einer Hand erfolgen. Bei Schnittstellen zu anderen Gewerken wird die technische Abstimmung früh geklärt.</p>
-          </details>
-          <details>
-            <summary>Ist eine Zusammenarbeit mit Garten- und Landschaftsbau möglich?</summary>
-            <p>Ja. Gerade bei Außenanlagen ist die Kombination aus Galabau, Stromversorgung, Garten-/Pooltechnik und Steuerung sinnvoll, damit Technik und Gestaltung sauber ineinandergreifen.</p>
-          </details>
-          <details>
-            <summary>Können bestehende Anlagen nachgerüstet werden?</summary>
-            <p>Oft ja. Vorab wird geprüft, welche Leitungen, Anschlüsse, Steuerungen oder Montagepunkte vorhanden sind und welche Lösung technisch sinnvoll ist.</p>
-          </details>
-          <details>
-            <summary>Wie startet eine Anfrage am besten?</summary>
-            <p>Ideal ist eine kurze Beschreibung mit Projektort, gewünschter Leistung, vorhandener Technik und Fotos der Situation. Danach lässt sich der nächste Schritt gezielt abstimmen.</p>
-          </details>
-        </div>
-      </div>
-    </section>
-
     <section id="kontakt" class="contact">
       <div class="container contact-box">
         <div>
@@ -400,9 +371,10 @@
         <a href="impressum.html">Impressum</a>
         <a href="datenschutz.html">Datenschutz</a>
         <button class="footer-cookie-link" type="button" data-open-cookie-settings>Cookie-Einstellungen</button>
-        <button class="theme-toggle" type="button" data-theme-toggle aria-label="Hell-/Dunkelmodus umschalten">
+        <button class="theme-toggle" type="button" data-open-theme-preview aria-haspopup="dialog">
           <span class="theme-toggle-icon" data-theme-icon-dark aria-hidden="true">☀</span>
           <span class="theme-toggle-icon" data-theme-icon-light aria-hidden="true">☾</span>
+          <span data-theme-toggle-label>Heller Modus</span>
         </button>
       </div>
     </div>
@@ -448,6 +420,42 @@
       <div class="cookie-preview-actions" data-cookie-preview-live-actions hidden>
         <button class="btn-secondary" type="button" data-cookie-reject>Ablehnen</button>
         <button class="btn" type="button" data-cookie-accept>Statistik akzeptieren</button>
+      </div>
+    </div>
+  </div>
+  <div class="theme-preview-overlay" data-theme-preview-overlay hidden>
+    <div class="theme-preview-modal" role="dialog" aria-modal="true" aria-labelledby="theme-preview-title">
+      <button class="cookie-preview-close" type="button" data-theme-preview-close aria-label="Vorschau schließen">×</button>
+      <div class="cookie-preview-head">
+        <div class="eyebrow">Vorschau</div>
+        <h2 id="theme-preview-title">Heller oder dunkler Modus?</h2>
+        <p>Wählen Sie die Darstellung, die Sie bevorzugen. Die Auswahl wird für künftige Besuche gespeichert.</p>
+      </div>
+
+      <div class="theme-preview-grid">
+        <button class="theme-preview-card" type="button" data-theme-preview-pick="dark">
+          <span class="theme-preview-swatch theme-preview-swatch-dark" aria-hidden="true">
+            <span class="theme-preview-swatch-bar"></span>
+            <span class="theme-preview-swatch-line"></span>
+            <span class="theme-preview-swatch-line theme-preview-swatch-line-short"></span>
+          </span>
+          <span class="theme-preview-card-label">
+            <span class="theme-preview-card-dot" aria-hidden="true">☀</span>
+            Dunkler Modus
+          </span>
+        </button>
+
+        <button class="theme-preview-card" type="button" data-theme-preview-pick="light">
+          <span class="theme-preview-swatch theme-preview-swatch-light" aria-hidden="true">
+            <span class="theme-preview-swatch-bar"></span>
+            <span class="theme-preview-swatch-line"></span>
+            <span class="theme-preview-swatch-line theme-preview-swatch-line-short"></span>
+          </span>
+          <span class="theme-preview-card-label">
+            <span class="theme-preview-card-dot" aria-hidden="true">☾</span>
+            Heller Modus
+          </span>
+        </button>
       </div>
     </div>
   </div>
