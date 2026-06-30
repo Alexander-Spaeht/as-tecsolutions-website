@@ -104,12 +104,15 @@
     hideBanner();
   }
 
-  // --- Theme-Vorschau (Modal) ---
-  const themeOpenButtons = document.querySelectorAll("[data-open-theme-preview]");
-  const themePreviewOverlay = document.querySelector("[data-theme-preview-overlay]");
-  const themePreviewClose = document.querySelector("[data-theme-preview-close]");
+  // --- Theme-Vorschau (Header-Popover) ---
+  const themeSwitch = document.querySelector("[data-theme-switch]");
+  const themeOpenButton = document.querySelector("[data-open-theme-preview]");
+  const themePreviewPopover = document.querySelector("[data-theme-preview-overlay]");
   const themePreviewCards = document.querySelectorAll("[data-theme-preview-pick]");
   const themeToggleLabels = document.querySelectorAll("[data-theme-toggle-label]");
+
+  const isTouchDevice = window.matchMedia("(hover: none), (pointer: coarse)").matches;
+  let themeCloseTimer = null;
 
   function currentTheme() {
     return document.documentElement.getAttribute("data-theme") || "dark";
@@ -118,10 +121,10 @@
   function setTheme(theme) {
     document.documentElement.setAttribute("data-theme", theme);
     try { localStorage.setItem(themeKey, theme); } catch (e) {}
-    updateThemeLabels();
+    updateThemeState();
   }
 
-  function updateThemeLabels() {
+  function updateThemeState() {
     const theme = currentTheme();
     const nextLabel = theme === "dark" ? "Heller Modus" : "Dunkler Modus";
     themeToggleLabels.forEach(function (label) {
@@ -130,39 +133,91 @@
     themePreviewCards.forEach(function (card) {
       card.setAttribute("data-active", card.getAttribute("data-theme-preview-pick") === theme ? "true" : "false");
     });
+    if (themeOpenButton) themeOpenButton.setAttribute("aria-label", "Darstellung: " + (theme === "dark" ? "Dunkel" : "Hell") + ". " + nextLabel + " wählen");
   }
 
-  function openThemePreview() {
-    if (!themePreviewOverlay) return;
-    updateThemeLabels();
-    themePreviewOverlay.removeAttribute("hidden");
-    document.body.style.overflow = "hidden";
+  function positionPopoverForNarrowViewport() {
+    if (!themePreviewPopover || !themeOpenButton) return;
+    if (window.matchMedia("(max-width: 480px)").matches) {
+      const rect = themeOpenButton.getBoundingClientRect();
+      themePreviewPopover.style.top = Math.round(rect.bottom) + "px";
+    } else {
+      themePreviewPopover.style.top = "";
+    }
   }
 
-  function closeThemePreview() {
-    if (!themePreviewOverlay) return;
-    themePreviewOverlay.setAttribute("hidden", "");
-    document.body.style.overflow = "";
+  function openThemePopover() {
+    if (!themePreviewPopover || !themeSwitch) return;
+    clearTimeout(themeCloseTimer);
+    updateThemeState();
+    themePreviewPopover.removeAttribute("hidden");
+    themeSwitch.setAttribute("data-open", "true");
+    if (themeOpenButton) themeOpenButton.setAttribute("aria-expanded", "true");
+    positionPopoverForNarrowViewport();
   }
 
-  themeOpenButtons.forEach(function (button) {
-    button.addEventListener("click", openThemePreview);
-  });
-  if (themePreviewClose) themePreviewClose.addEventListener("click", closeThemePreview);
-  if (themePreviewOverlay) {
-    themePreviewOverlay.addEventListener("click", function (event) {
-      if (event.target === themePreviewOverlay) closeThemePreview();
-    });
+  function closeThemePopover() {
+    if (!themePreviewPopover || !themeSwitch) return;
+    themePreviewPopover.setAttribute("hidden", "");
+    themeSwitch.removeAttribute("data-open");
+    if (themeOpenButton) themeOpenButton.setAttribute("aria-expanded", "false");
   }
+
+  function scheduleClose() {
+    clearTimeout(themeCloseTimer);
+    themeCloseTimer = setTimeout(closeThemePopover, 220);
+  }
+
+  function isPopoverOpen() {
+    return themePreviewPopover && !themePreviewPopover.hasAttribute("hidden");
+  }
+
+  if (themeSwitch && themeOpenButton && themePreviewPopover) {
+    if (isTouchDevice) {
+      // Touch: erstes Tippen öffnet das Popover, zweites Tippen auf eine Karte wählt aus.
+      themeOpenButton.addEventListener("click", function (event) {
+        if (!isPopoverOpen()) {
+          event.preventDefault();
+          openThemePopover();
+        }
+        // Wenn bereits offen, lässt der Klick den darunterliegenden Karten-Klick durch (Karten haben eigene Handler).
+      });
+      document.addEventListener("click", function (event) {
+        if (isPopoverOpen() && !themeSwitch.contains(event.target)) {
+          closeThemePopover();
+        }
+      });
+    } else {
+      // Desktop: Hover öffnet, Klick auf eine Karte wählt aus, Verlassen schließt mit kurzer Verzögerung.
+      themeSwitch.addEventListener("mouseenter", openThemePopover);
+      themeSwitch.addEventListener("mouseleave", scheduleClose);
+      themeOpenButton.addEventListener("click", function () {
+        if (isPopoverOpen()) {
+          closeThemePopover();
+        } else {
+          openThemePopover();
+        }
+      });
+      themeOpenButton.addEventListener("focus", openThemePopover);
+      themeSwitch.addEventListener("focusout", function (event) {
+        if (!themeSwitch.contains(event.relatedTarget)) closeThemePopover();
+      });
+    }
+  }
+
   themePreviewCards.forEach(function (card) {
     card.addEventListener("click", function () {
       setTheme(card.getAttribute("data-theme-preview-pick"));
-      closeThemePreview();
+      closeThemePopover();
     });
   });
+
   document.addEventListener("keydown", function (event) {
-    if (event.key === "Escape" && themePreviewOverlay && !themePreviewOverlay.hidden) closeThemePreview();
+    if (event.key === "Escape" && isPopoverOpen()) {
+      closeThemePopover();
+      if (themeOpenButton) themeOpenButton.focus();
+    }
   });
 
-  updateThemeLabels();
+  updateThemeState();
 })();
