@@ -985,34 +985,6 @@
       html { scroll-behavior: auto; }
       *, *::before, *::after { transition-duration: .001ms !important; animation-duration: .001ms !important; }
     }
-    .wip-bar {
-    position: relative;
-    z-index: 60;
-    background: linear-gradient(90deg, rgba(200,152,42,.15), rgba(200,152,42,.08));
-    border-bottom: 1px solid rgba(200,152,42,.35);
-    padding: 11px 22px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 10px;
-    text-align: center;
-    font-size: .91rem;
-    color: var(--muted);
-  }
-  .wip-bar strong { color: var(--gold-2); font-weight: 900; }
-  .wip-dot {
-    display: inline-block;
-    width: 7px;
-    height: 7px;
-    border-radius: 50%;
-    background: var(--gold);
-    flex-shrink: 0;
-    animation: wip-pulse 2s ease-in-out infinite;
-  }
-  @keyframes wip-pulse {
-    0%, 100% { opacity: 1; }
-    50% { opacity: .3; }
-  }
 
 /* Cookie-Banner-Vorschau (Modal) */
 .cookie-preview-overlay {
