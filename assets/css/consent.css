@@ -1,0 +1,28 @@
+/* Einwilligungsfenster. Wird nur wirksam, wenn assets/js/consent.js aktiviert ist. */
+.cc[hidden] { display: none; }
+.cc { position: fixed; left: 1rem; right: 1rem; bottom: 1rem; z-index: 100; display: flex; justify-content: center; pointer-events: none; }
+.cc:focus { outline: none; }
+.cc-panel { pointer-events: auto; width: min(100%, 760px); max-height: calc(100vh - 2rem); max-height: calc(100dvh - 2rem); overflow-y: auto; background: var(--paper, #fff); color: var(--ink, #23272B); border: 1px solid var(--line, #D8DBD5); border-top: 4px solid var(--gold, #A87618); border-radius: 6px; box-shadow: 0 10px 40px rgba(20, 22, 24, .28); padding: 1.3rem 1.5rem 1.2rem; }
+.cc-title { font-family: var(--font-head, Arial, sans-serif); font-size: 1.35rem; font-weight: 600; margin: 0 0 .5rem; }
+.cc-title:focus { outline: none; }
+.cc-panel p { margin: 0 0 1rem; font-size: 1rem; color: var(--muted, #545A60); }
+.cc-actions { display: flex; flex-wrap: wrap; gap: .7rem; margin: 1.1rem 0 .9rem; }
+.cc-btn { flex: 1 1 11rem; background: var(--gold-dark, #845B0F); color: #fff; border: 2px solid var(--gold-dark, #845B0F); padding: .7rem 1rem; border-radius: 4px; font: inherit; font-weight: 600; font-size: 1.02rem; cursor: pointer; text-align: center; }
+.cc-btn:hover { background: var(--ink, #23272B); border-color: var(--ink, #23272B); }
+.cc-btn--plain { background: transparent; color: var(--ink, #23272B); border-color: var(--ink, #23272B); }
+.cc-btn--plain:hover { background: var(--ink, #23272B); color: #fff; }
+.cc-btn:focus-visible, .cc-panel a:focus-visible, .cc-cat input:focus-visible { outline: 3px solid var(--gold, #A87618); outline-offset: 2px; }
+.cc-cats { margin-top: .6rem; border-top: 1px solid var(--line, #D8DBD5); }
+.cc-cat { padding: .85rem 0 .2rem; border-bottom: 1px solid var(--line, #D8DBD5); }
+.cc-cat label { display: flex; align-items: center; gap: .65rem; cursor: pointer; font-size: 1.05rem; }
+.cc-cat input { width: 1.3rem; height: 1.3rem; margin: 0; accent-color: var(--gold-dark, #845B0F); flex: none; }
+.cc-cat input:disabled { cursor: not-allowed; }
+.cc-cat p { margin: .35rem 0 .8rem 1.95rem; font-size: .95rem; }
+.cc-links { margin: 0 !important; font-size: .92rem !important; }
+.cc-open { cursor: pointer; }
+@media (max-width: 560px) {
+  .cc { left: .5rem; right: .5rem; bottom: .5rem; }
+  .cc-panel { padding: 1.1rem 1rem 1rem; }
+  .cc-btn { flex-basis: 100%; }
+}
+@media (prefers-reduced-motion: reduce) { .cc * { transition: none !important; animation: none !important; } }
