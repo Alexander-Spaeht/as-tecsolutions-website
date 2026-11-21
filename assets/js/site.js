@@ -36,7 +36,7 @@
           return res.json().catch(function () { return {}; }).then(function (d) { return res.ok && d.ok !== false; });
         })
         .then(function (ok) {
-          if (ok) { form.reset(); if (status) status.textContent = "Vielen Dank, Ihre Anfrage ist bei uns angekommen. Wir melden uns in der Regel noch am selben Tag, spätestens am nächsten Tag."; }
+          if (ok) { form.reset(); if (status) status.textContent = form.getAttribute("data-success") || "Vielen Dank, Ihre Anfrage ist bei uns angekommen. Wir melden uns in der Regel noch am selben Tag, spätestens am nächsten Tag."; }
           else if (status) status.textContent = fehler;
         })
         .catch(function () { if (status) status.textContent = fehler; })
